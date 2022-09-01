@@ -19,9 +19,14 @@
 		<section class="contents d-flex justify-content-center">
 			<div class="join-box my-5">
 				<h2 class="text-center">로그인</h2>
-				<input type="text" placeholder="아이디" class="form-control mt-2">
-				<input type="password" placeholder="비밀번호" class="form-control mt-2">
-				<button type="button" class="btn btn-primary btn-block mt-2">로그인</button>
+				<form id="loginForm">
+				<input type="text" placeholder="아이디" class="form-control mt-2" id="loginIdInput">
+				<input type="password" placeholder="비밀번호" class="form-control mt-2" id="passwordInput">
+				
+				<button type="submit" class="btn btn-primary btn-block mt-2" id="loginBtn">로그인</button>
+				
+				</form>
+				
 				<div class="text-center mt-2">
 					<A href="/user/signup/view"> 회원가입 </A>				
 				</div>
@@ -29,6 +34,49 @@
 		</section>
 	</div>
 	<c:import url="/WEB-INF/jsp/include/footer.jsp"></c:import>
-
+	<script>
+		$(document).ready(function(){
+			/* $("#loginBtn").on("click", function(){ */
+				$("#loginForm").on("submit", function(e){
+					
+					e.preventDefault();	
+					
+					let loginId = $("#loginIdInput").val();
+					let password = $("#passwordInput").val();
+					
+					if(loginId == ""){
+						alert("아이디를 입력해주세요.");
+						return;
+					}
+					
+					if(password == ""){
+						alert("비밀번호를 입력해주세요.");
+						return;
+					}
+					
+					$.ajax({
+						
+						type:"post"
+						, url:"/user/signin"
+						, data:{"loginId":loginId, "password":password}
+						, success:function(data){
+							
+							if(data.result == "success"){
+								location.href = "/post/list/view";
+							} else {
+								alert("아이디/비밀번호를 확인하세요.");
+							}
+						}
+						, error:function(){
+							alert("로그인 에러");
+						}
+					});
+				
+				
+				
+				
+			});
+		});
+	</script>
 </body>
 </html>
